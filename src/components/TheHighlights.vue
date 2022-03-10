@@ -2,109 +2,11 @@
   <div class="highlights_component">
       <div class="layout-1368">
         <div class="quick-statistics">
-          <div class="qs-block">
-            <div class="qs-title">Recently Added</div>
-            <div class="top-gainers">
-              <div class="tg-item">
-                <div class="item_rank">
-                  <div class="rank_value">1</div>
-                </div>
-                <div class="item_asset-data"><img src="../assets/images/btc.svg" loading="lazy" alt="" class="asset_icon">
-                  <div class="asset_name">Bitcoin</div>
-                  <div class="asset_ticker">BTC</div>
-                </div>
-                <div class="item_price-data">
-                  <div class="price_value">$39,367.67</div>
-                </div>
-                <div class="item_listing-data">
-                  <div class="listing_added">12 minutes</div>
-                </div>
-              </div>
-              <div class="tg-item">
-                <div class="item_rank">
-                  <div class="rank_value">1</div>
-                </div>
-                <div class="item_asset-data"><img src="../assets/images/btc.svg" loading="lazy" alt="" class="asset_icon">
-                  <div class="asset_name">Bitcoin</div>
-                  <div class="asset_ticker">BTC</div>
-                </div>
-                <div class="item_price-data">
-                  <div class="price_value">$39,367.67</div>
-                </div>
-                <div class="item_listing-data">
-                  <div class="listing_added">12 minutes</div>
-                </div>
-              </div>
-              <div class="tg-item">
-                <div class="item_rank">
-                  <div class="rank_value">1</div>
-                </div>
-                <div class="item_asset-data"><img src="../assets/images/btc.svg" loading="lazy" alt="" class="asset_icon">
-                  <div class="asset_name">Bitcoin</div>
-                  <div class="asset_ticker">BTC</div>
-                </div>
-                <div class="item_price-data">
-                  <div class="price_value">$39,367.67</div>
-                </div>
-                <div class="item_listing-data">
-                  <div class="listing_added">12 minutes</div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="qs-block">
-            <div class="qs-title">Top Gainers</div>
-            <div class="top-gainers">
-              <div class="tg-item">
-                <div class="item_rank">
-                  <div class="rank_value">1</div>
-                </div>
-                <div class="item_asset-data"><img src="../assets/images/btc.svg" loading="lazy" alt="" class="asset_icon">
-                  <div class="asset_name">Bitcoin</div>
-                  <div class="asset_ticker">BTC</div>
-                </div>
-                <div class="item_price-data">
-                  <div class="price_value">$39,367.67</div>
-                </div>
-                <div class="item_listing-data">
-                  <div class="price_percent-change-positive">0.00%</div>
-                </div>
-              </div>
-              <div class="tg-item">
-                <div class="item_rank">
-                  <div class="rank_value">1</div>
-                </div>
-                <div class="item_asset-data"><img src="../assets/images/btc.svg" loading="lazy" alt="" class="asset_icon">
-                  <div class="asset_name">Bitcoin</div>
-                  <div class="asset_ticker">BTC</div>
-                </div>
-                <div class="item_price-data">
-                  <div class="price_value">$39,367.67</div>
-                </div>
-                <div class="item_listing-data">
-                  <div class="price_percent-change-positive">0.00%</div>
-                </div>
-              </div>
-              <div class="tg-item">
-                <div class="item_rank">
-                  <div class="rank_value">1</div>
-                </div>
-                <div class="item_asset-data"><img src="../assets/images/btc.svg" loading="lazy" alt="" class="asset_icon">
-                  <div class="asset_name">Bitcoin</div>
-                  <div class="asset_ticker">BTC</div>
-                </div>
-                <div class="item_price-data">
-                  <div class="price_value">$39,367.67</div>
-                </div>
-                <div class="item_listing-data">
-                  <div class="price_percent-change-positive">0.00%</div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <TopGainers />
+          <TopLosers />
           <div id="w-node-e2ccbdc9-fd14-c110-6bd1-dc7efa6701cd-d98399a7" class="qs-block">
             <div class="qs-title">State of the Market</div>
-            <div class="text-block-2">The total crypto market cap is $1.89T USD.<br>The market is down -7.00% over the last month and down -0.28% over the last 24 hours.</div>
+            <div class="text-block-2">The total crypto market cap is <strong>$1.89T USD</strong>.<br>The market is down -7.00% over the last month and down -0.28% over the last 24 hours.</div>
           </div>
           <div id="w-node-a40b5b2b-53c7-5367-1ddf-c8201bb03b97-d98399a7" class="qs-block">
             <div class="sponsor-info"><img src="../assets/images/nexo.png" loading="lazy" alt="" class="image-2">
@@ -121,8 +23,14 @@
 </template>
 
 <script>
-export default {
+import TopGainers from '@/components/TopGainers.vue'
+import TopLosers from '@/components/TopLosers.vue'
 
+export default {
+    components: {
+      TopGainers,
+      TopLosers,
+    },
 }
 </script>
 

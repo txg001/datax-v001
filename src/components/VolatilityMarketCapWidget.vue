@@ -42,7 +42,7 @@
           </div>
           <div class="smart-table">
             <div class="table-body">
-              <div class="table-row" v-for="value in coins" :key="value">
+              <div class="table-row" v-for="value in coins" :key="value.id">
                 <div class="cell rank">
                   <div class="value rank">{{ value.market_cap_rank }}</div>
                 </div>
@@ -112,6 +112,10 @@
 import axios from 'axios'
 
 export default {
+    created() {
+        this.getPrice();
+        this.timer = setInterval(this.getPrice, 2000);
+    },
 
     data: () => ({
         coins: [],
@@ -119,54 +123,50 @@ export default {
         timer: [],
     }),
 
-    created() {
-        this.getPrice();
-        this.timer = setInterval(this.getPrice, 10000);
-    },
-
     methods: {
         async getPrice() {
             axios
             .get('https://coindata.ddns.net/scripts/coinstats.php')
-            .then(response => { this.coins = response.data
-            console.log(response)})
+            .then(response => { 
+              this.coins = response.data; 
+              console.log(response.data)
+            })
             .catch(e => { this.errors.push(e)})
         },
 
-      percentValueStyler(value) { return {
-          'positivePct': value > 0 && value <= 25, 
-          'positivePctLarge': value > 25,
+        percentValueStyler(value) { return {
+            'positivePct': value > 0 && value <= 25, 
+            'positivePctLarge': value > 25,
 
-          'negativePct': value < 0 && value >= -25, 
-          'negativePctLarge': value < -25,
-        };
-      },
+            'negativePct': value < 0 && value >= -25, 
+            'negativePctLarge': value < -25,
+          };
+        },
 
-      volatilityValueStyler(value) { return {
-          'lowVol': value > 0 && value <= 25, 
-          'mediumVol': value > 25 && value <= 50,
-          'highVol': value > 50 && value <= 75,
-          'extremeVol': value > 75 && value <= 100,
-        };
-      },
+        volatilityValueStyler(value) { return {
+            'lowVol': value > 0 && value <= 25, 
+            'mediumVol': value > 25 && value <= 50,
+            'highVol': value > 50 && value <= 75,
+            'extremeVol': value > 75 && value <= 100,
+          };
+        },
 
-      numberValueStyler(value) { return {
-          'positiveNum': value > 0,
-          'negativeNum': value < 0,
-          'neutralNum': value = 0,
+        numberValueStyler(value) { return {
+            'positiveNum': value > 0,
+            'negativeNum': value < 0,
+            'neutralNum': value = 0,
+          };
+        },
 
-        };
-      },
+        numAbbr(value) {
+            if (value >= 1000000000) { return (value / 1000000000).toFixed(2).replace(/\.0$/, '') + 'B'; }
+            if (value >= 1000000) { return (value / 1000000).toFixed(2).replace(/\.0$/, '') + 'M'; }
+            if (value >= 1000) { return (value / 1000).toFixed(2).replace(/\.0$/, '') + 'K'; }
+            return value;
+        },
 
-      numAbbr(value) {
-          if (value >= 1000000000) { return (value / 1000000000).toFixed(2).replace(/\.0$/, '') + 'B'; }
-          if (value >= 1000000) { return (value / 1000000).toFixed(2).replace(/\.0$/, '') + 'M'; }
-          if (value >= 1000) { return (value / 1000).toFixed(2).replace(/\.0$/, '') + 'K'; }
-          return value;
-      },
-
-      currencyFormatter(value) { return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
-      },
+        currencyFormatter(value) { return value?.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+        },
     },
 
 }

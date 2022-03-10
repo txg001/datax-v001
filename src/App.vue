@@ -970,7 +970,7 @@ export default {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  width: 146px;
+  width: 160px;
   -webkit-box-orient: horizontal;
   -webkit-box-direction: normal;
   -webkit-flex-direction: row;
@@ -1104,7 +1104,7 @@ export default {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  width: 100px;
+  width: 90px;
   -webkit-box-pack: end;
   -webkit-justify-content: flex-end;
   -ms-flex-pack: end;

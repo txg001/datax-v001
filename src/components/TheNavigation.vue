@@ -16,6 +16,9 @@
               <div class="dropdown-link">
                 <div class="dropdown-text">Exchanges</div>
               </div>
+              <div class="button">
+                  <router-link to="/">Market Cap Ranking</router-link>
+              </div>
             </div>
           </div>
           <div class="right-content">

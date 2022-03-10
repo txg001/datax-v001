@@ -1,20 +1,20 @@
 <template>
   <div>
     <TheHighlights />
-    <TheVolatilityTable />
+    <VolatilityMarketCapWidget />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
 import TheHighlights from '@/components/TheHighlights.vue'
-import TheVolatilityTable from '@/components/TheVolatilityTable.vue'
+import VolatilityMarketCapWidget from '@/components/VolatilityMarketCapWidget.vue'
 
 export default {
-  name: 'Home',
+  name: 'ByVolatilityTable',
   components: {
     TheHighlights,
-    TheVolatilityTable
+    VolatilityMarketCapWidget
   }
 }
 </script>
