@@ -5,7 +5,7 @@
           <div class="table-toolbar">
             <div class="pt-wrapper">
               <div class="pt-left">
-                <div class="text-block-3">Cryptocurrencies Sorted by Volatility</div>
+                <div class="text-block-3">Cryptocurrencies Sorted by Greatest Market Cap</div>
               </div>
               <div class="pt-right">
                 <div class="category-selectors">
