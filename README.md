@@ -1,24 +1,3 @@
-# datax-v001
+# DataX - Version - 0.0.1 Alpha
 
-## Project setup
-```
-yarn install
-```
-
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
-
-### Compiles and minifies for production
-```
-yarn build
-```
-
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+[![Netlify Status](https://api.netlify.com/api/v1/badges/b1319247-aad5-43cd-9d8e-4204df7ff0f7/deploy-status)](https://app.netlify.com/sites/datax-dev/deploys)
