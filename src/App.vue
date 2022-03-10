@@ -595,9 +595,9 @@ export default {
   width: 90.36%;
   height: 100%;
   border-radius: 25px;
-  background-color: #ced6e4;
-  background-image: linear-gradient(225deg, #7ea7e4, #cdd6e4 75%);
+  background-color: #1c71e2;
 }
+
 
 .accounts-component {
   display: -webkit-box;

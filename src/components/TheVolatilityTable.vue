@@ -10,22 +10,13 @@
               <div class="pt-right">
                 <div class="category-selectors">
                   <div class="category-text">Category:</div>
-                  <div class="selector-button active">
-                    <div>All</div>
-                  </div>
-                  <div class="selector-button">
-                    <div>DeFi</div>
-                  </div>
-                  <div class="selector-button">
-                    <div>Metaverse</div>
-                  </div>
-                  <div class="selector-button">
-                    <div>Stablecoins</div>
-                  </div>
+                  <div class="selector-button active"><div>All</div></div>
+                  <div class="selector-button"><div>DeFi</div></div>
+                  <div class="selector-button"><div>Metaverse</div></div>
+                  <div class="selector-button"><div>Stablecoins</div></div>
                 </div>
                 <div class="divider darker"></div>
-                <div class="toolbar-button active">
-                  <div>More Filters</div>
+                <div class="toolbar-button active"><div>More Filters</div>
                 </div>
                 <div class="search-wrapper">
                   <div class="search-block w-form">
@@ -177,6 +168,7 @@ export default {
       currencyFormatter(value) { return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
       },
     },
+
 }
 </script>
 
@@ -272,11 +264,11 @@ export default {
   align-items: center;
   border-radius: 8px;
   line-height: 21px;
-  font-weight: 500;
-  padding-right: 16px;
-  background-image: url('../assets/images/increase-icon.svg');
+  font-weight: 800;
+  padding-right: 18px;
+  background-image: url('../assets/images/on-fire.gif');
   background-position: 100% 50%;
-  background-size:18px;
+  background-size:13px;
   background-repeat: no-repeat;
 }
 
@@ -320,7 +312,7 @@ export default {
   -ms-flex-align: center;
   align-items: center;
   border-radius: 4px;
-  background-image: url('../assets/images/arrow-down-right.svg');
+  background-image: url('../assets/images/on-fire.gif');
   background-position: 100% 50%;
   background-size: 13px;
   background-repeat: no-repeat;
@@ -333,23 +325,25 @@ export default {
 
 .negativeNum {
   color: #d9475a;
-  font-size: 12px;
+  font-size: 10px;
+  font-weight: 600;
   line-height: 22.5px;
   padding-right: 16px;
   background-image: url('../assets/images/decrease-icon.svg');
   background-position: 100% 50%;
-  background-size: 10px;
+  background-size: 9px;
   background-repeat: no-repeat;
 }
 
 .positiveNum {
   color: #00ad6b;
-  font-size: 12px;
+  font-size: 10px;
+  font-weight: 600;
   line-height: 22.5px;
   padding-right: 16px;
   background-image: url('../assets/images/increase-icon.svg');
   background-position: 100% 50%;
-  background-size: 10px;
+  background-size: 9px;
   background-repeat: no-repeat;
 }
 
