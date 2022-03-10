@@ -34,7 +34,7 @@
               <div class="cell l"><div class="table-heading-text">24h % Chg</div></div>
               <div class="cell l"><div class="table-heading-text">7d % Chg</div></div>
               <div class="cell l"><div class="table-heading-text">1m % Chg</div></div>
-              <div class="cell l"><div class="table-heading-text">1d Vol</div></div>
+              <div class="cell l"><div class="table-heading-text">24h Vol</div></div>
               <div class="cell l"><div class="table-heading-text">7d Vol</div></div>
               <div class="cell l"><div class="table-heading-text">1m Vol</div></div>
               <div class="cell xl"><div class="table-heading-text">circulating supply</div></div>
