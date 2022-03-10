@@ -32,12 +32,6 @@
                     <form id="email-form" name="email-form" data-name="Email Form" method="get" class="search-wrapper"><input type="email" class="search-input w-input" maxlength="256" name="Search-2" data-name="Search 2" placeholder="Search" id="Search-2" required="">
                       <div class="div-block-2">/</div>
                     </form>
-                    <div class="w-form-done">
-                      <div>Thank you! Your submission has been received!</div>
-                    </div>
-                    <div class="w-form-fail">
-                      <div>Oops! Something went wrong while submitting the form.</div>
-                    </div>
                   </div>
                 </div>
               </div>
