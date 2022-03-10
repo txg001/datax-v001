@@ -5,7 +5,7 @@
           <div class="table-toolbar">
             <div class="pt-wrapper">
               <div class="pt-left">
-                <div class="text-block-3">Cryptocurrencies Sorted by Greatest Market Cap</div>
+                <div class="text-block-3">Top 100 Cryptocurrencies Sorted by 24 hour Volatility</div>
               </div>
               <div class="pt-right">
                 <div class="category-selectors">
@@ -114,7 +114,7 @@ import axios from 'axios'
 export default {
     created() {
         this.getPrice();
-        this.timer = setInterval(this.getPrice, 2000);
+        this.timer = setInterval(this.getPrice, 5000);
     },
 
     data: () => ({
@@ -128,7 +128,7 @@ export default {
             axios
             .get('https://coindata.ddns.net/scripts/coinstats.php')
             .then(response => { 
-              this.coins = response.data; 
+              this.coins = response.data.sort((b, a) => parseFloat(a.datax.h24_vol) - parseFloat(b.datax.h24_vol)); 
               console.log(response.data)
             })
             .catch(e => { this.errors.push(e)})
@@ -247,29 +247,27 @@ export default {
 }
 
 .positivePctLarge {
-  background-color: rgba(4, 165, 141, 0);
-  color: #00ad6b;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  width: 80px;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
+  height: 27px;
+  padding-right: 18px;
+  -webkit-box-pack: end;
+  -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
   -webkit-box-align: center;
   -webkit-align-items: center;
   -ms-flex-align: center;
   align-items: center;
-  border-radius: 8px;
-  line-height: 21px;
-  font-weight: 800;
-  padding-right: 18px;
+  border-radius: 4px;
   background-image: url('../assets/images/on-fire.gif');
   background-position: 100% 50%;
-  background-size:13px;
+  background-size: 13px;
   background-repeat: no-repeat;
+  color: #00ad6b;
+  font-weight: 800;
 }
 
 .negativePct {
