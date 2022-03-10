@@ -46,12 +46,12 @@
               <div class="cell rank"><div class="table-heading-text">#</div></div>
               <div class="asset-cell xl"><div class="table-heading-text">Name</div></div>
               <div class="cell l"><div class="table-heading-text">price</div></div>
-              <div class="cell l"><div class="table-heading-text">24h</div></div>
-              <div class="cell l"><div class="table-heading-text">7d</div></div>
-              <div class="cell l"><div class="table-heading-text">1m</div></div>
-              <div class="cell l"><div class="table-heading-text">1d</div></div>
-              <div class="cell l"><div class="table-heading-text">7d</div></div>
-              <div class="cell l"><div class="table-heading-text">1m</div></div>
+              <div class="cell l"><div class="table-heading-text">24h % Chg</div></div>
+              <div class="cell l"><div class="table-heading-text">7d % Chg</div></div>
+              <div class="cell l"><div class="table-heading-text">1m % Chg</div></div>
+              <div class="cell l"><div class="table-heading-text">1d Vol</div></div>
+              <div class="cell l"><div class="table-heading-text">7d Vol</div></div>
+              <div class="cell l"><div class="table-heading-text">1m Vol</div></div>
               <div class="cell xl"><div class="table-heading-text">circulating supply</div></div>
             </div>
           </div>
