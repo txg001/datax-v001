@@ -53,7 +53,7 @@
                   <div class="asset-ticker">{{ value.symbol }}</div>
                 </div>
                 <div class="cell l">
-                  <div class="value" :key="value.current_price">{{ currencyFormatter( value.current_price ) }}</div>
+                  <div class="dynamic-value" :key="value.current_price">{{ currencyFormatter( value.current_price ) }}</div>
                   <div :class="numberValueStyler(value.price_change_24h)">{{ currencyFormatter(value.price_change_24h) }}</div>
                 </div>
                 <div class="cell l">
@@ -115,7 +115,7 @@ import axios from 'axios'
 export default {
     created() {
         this.getPrice();
-        this.timer = setInterval(this.getPrice, 5000);
+        this.timer = setInterval(this.getPrice, 10000);
     },
 
     data: () => ({
@@ -184,8 +184,12 @@ export default {
 </script>
 
 <style>
-.value {
+.dynamic-value {
   background-color: white;
+  color: #1e293b;
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: 600;
   animation: bgchange 3s;
 }
 @keyframes bgchange {
