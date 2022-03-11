@@ -42,9 +42,9 @@
           </div>
           <div class="smart-table">
             <div class="table-body">
-              <div class="table-row" v-for="value in coins" :key="value.id">
+              <div class="table-row" v-for="(value, index) in coins" :key="value.id">
                 <div class="cell rank">
-                  <div class="value rank">{{ value.market_cap_rank }}</div>
+                  <div class="value rank">{{ index+1 }}</div>
                 </div>
                 <div class="asset-cell xl">
                   <img :src="value.image" loading="lazy" alt="" class="asset-logo">
