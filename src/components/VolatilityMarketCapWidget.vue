@@ -43,9 +43,9 @@
           </div>
           <div class="smart-table">
             <div class="table-body">
-              <div class="table-row" v-for="(value, index) in filteredData" :key="value.id">
+              <div class="table-row" v-for="(value) in filteredData" :key="value.id">
                 <div class="cell rank">
-                  <div class="value rank">{{ index+1 }}</div>
+                  <div class="value rank">{{ value.market_cap_rank }}</div>
                 </div>
                 <div class="asset-cell xl">
                   <img :src="value.image" loading="lazy" alt="" class="asset-logo">
@@ -53,7 +53,7 @@
                   <div class="asset-ticker">{{ value.symbol }}</div>
                 </div>
                 <div class="cell l">
-                  <div class="value onchcange" :key="value.current_price">{{ currencyFormatter( value.current_price ) }}</div>
+                  <div class="value" :key="value.current_price">{{ currencyFormatter( value.current_price ) }}</div>
                   <div :class="numberValueStyler(value.price_change_24h)">{{ currencyFormatter(value.price_change_24h) }}</div>
                 </div>
                 <div class="cell l">
@@ -149,7 +149,6 @@ export default {
         percentValueStyler(value) { return {
             'positivePct': value > 0 && value <= 25, 
             'positivePctLarge': value > 25,
-
             'negativePct': value < 0 && value >= -25, 
             'negativePctLarge': value < -25,
           };
@@ -187,13 +186,15 @@ export default {
 <style>
 .value {
   background-color: white;
-  animation: bgchange 2s;
+  animation: bgchange 3s;
 }
 @keyframes bgchange {
   from {
     background-color: green;
+    color: white;
   } to {
     background-color: white;
+    color: black;
   }
 }
 
