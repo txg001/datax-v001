@@ -52,7 +52,7 @@
                   <div class="asset-ticker">{{ value.symbol }}</div>
                 </div>
                 <div class="cell l">
-                  <div class="value">{{ currencyFormatter( value.current_price ) }}</div>
+                  <div class="value onchcange" :key="value.current_price">{{ currencyFormatter( value.current_price ) }}</div>
                   <div :class="numberValueStyler(value.price_change_24h)">{{ currencyFormatter(value.price_change_24h) }}</div>
                 </div>
                 <div class="cell l">
@@ -128,7 +128,7 @@ export default {
             axios
             .get('https://coindata.ddns.net/scripts/coinstats.php')
             .then(response => { 
-              this.coins = response.data.sort((b, a) => parseFloat(a.datax.h24_vol) - parseFloat(b.datax.h24_vol)); 
+              this.coins = response.data; 
               console.log(response.data)
             })
             .catch(e => { this.errors.push(e)})
@@ -173,6 +173,18 @@ export default {
 </script>
 
 <style>
+.value {
+  background-color: white;
+  animation: bgchange 2s;
+}
+@keyframes bgchange {
+  from {
+    background-color: green;
+  } to {
+    background-color: white;
+  }
+}
+
 .lowVol {
   width: 90.36%;
   height: 100%;
