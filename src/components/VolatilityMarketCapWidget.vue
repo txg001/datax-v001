@@ -20,7 +20,8 @@
                 </div>
                 <div class="search-wrapper">
                   <div class="search-block w-form">
-                    <form id="email-form" name="email-form" data-name="Email Form" method="get" class="search-wrapper"><input type="email" class="search-input w-input" maxlength="256" name="Search-2" data-name="Search 2" placeholder="Search" id="Search-2" required="">
+                    <form class="search-wrapper">
+                      <input v-model="search" type="email" class="search-input w-input" placeholder="Search" id="Search-2" required="">
                       <div class="div-block-2">/</div>
                     </form>
                   </div>
@@ -42,7 +43,7 @@
           </div>
           <div class="smart-table">
             <div class="table-body">
-              <div class="table-row" v-for="(value, index) in coins" :key="value.id">
+              <div class="table-row" v-for="(value, index) in filteredData" :key="value.id">
                 <div class="cell rank">
                   <div class="value rank">{{ index+1 }}</div>
                 </div>
@@ -118,10 +119,21 @@ export default {
     },
 
     data: () => ({
+        search: '',
         coins: [],
         errors: [],
         timer: [],
     }),
+
+    computed: {
+      filteredData() {
+        return this.coins
+          .filter(
+            ({ name, symbol }) => [name, symbol]
+              .some(val => val.toLowerCase().includes(this.search))
+          );
+        }
+    },
 
     methods: {
         async getPrice() {
