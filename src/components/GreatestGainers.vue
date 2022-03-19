@@ -1,28 +1,36 @@
 <template>
-  <div class="qs-block gainers">
-          <div class="qsb-header">
-            <div class="qsb-header-left">
-              <div data-w-id="6a4f276c-5947-d62f-32dc-ff1f339fb101" data-animation-type="lottie" data-src="../assets/documents/trending-down.json" data-loop="0" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="1.0166666666666666" data-duration="0" class="lottie-animation"></div>
-              <div>Greatest Gainers</div>
-            </div><img src="images/last-24-hours-96.png" loading="lazy" alt="" class="qsbh-icon">
+<div class="qs-block">
+        <div class="qsb-header">
+          <div class="qsb-header-left">
+            <div class="icon green w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trending-up"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg></div>
+            <div>Top Movers</div>
           </div>
-          <div class="top-gainers">
-            <div class="tg-item" v-for="(value) in coins.slice(0,20)" :key="value">
-              <div class="item_asset-data">
-                  <img :src="value.image" loading="lazy" alt="" class="asset_icon">
-                <div class="asset_name">{{ value.name }}</div>
-                <div class="asset_ticker">{{ value.symbol }}</div>
+          <img src="../assets/images/last-24-hours-96_1last-24-hours-96.png" loading="lazy" alt="" class="qsbh-icon">
+        </div>
+        <div class="top-gainers">
+          <div class="tg-item" v-for="(value) in coins" :key="value">
+            <div class="w-layout-grid asset-data-grid">
+              <div id="w-node-ae35288a-8d5a-db7e-7897-48bd95956176-6bd61ad4" class="symbol-logos">
+                <img :src="value.image" loading="lazy" alt="" class="asset-logo">
+                <img src="../assets/images/usdt.svg" loading="lazy" alt="" class="usdt-logo"></div>
+              <div id="w-node-_25e8b672-effa-51d5-2d27-2d731e85bb8e-6bd61ad4" class="symbol-pairs">{{ value.symbol }}-USD</div>
+              <div id="w-node-_972c6198-051d-a38d-b594-bc41ec28b5b5-6bd61ad4" class="symbol-pairs-long">{{ value.name }} / TetherUS</div>
+            </div>
+            <div class="w-layout-grid price-data-grid">
+              <div id="w-node-fdc8b29f-7693-d8e9-ba29-ada352c6f265-6bd61ad4" class="data-cell">
+                <div class="price">{{ currencyFormatter( value.current_price )}}</div>
               </div>
-              <div class="item_price-data">
-                <div class="dynamic-value-small" :key="value.current_price">{{ currencyFormatter( value.current_price )}}</div>
+              <div id="w-node-_472e4662-8626-fde2-c00d-a7a47f6158f0-6bd61ad4" class="data-cell">
+                <div :key="parseFloat(value.price_change_24h).toFixed(4)" :class="numberValueStyler(value.price_change_24h)">{{ parseFloat(value.price_change_24h).toFixed(4) }}</div>
               </div>
-              <div class="item_listing-data">
-                <div :class="percentValueStyler(value.price_change_percentage_24h_in_currency)">{{ parseFloat( value.price_change_percentage_24h_in_currency?.toLocaleString() ).toFixed(2) }}%</div>
+              <div id="w-node-_2c4cd426-a529-68bf-34ab-7a7f57ee277d-6bd61ad4" class="data-cell">
+                <div :key="value.price_change_percentage_24h_in_currency" :class="numberValueStyler(value.price_change_percentage_24h_in_currency)">{{ parseFloat( value.price_change_percentage_24h_in_currency?.toLocaleString() ).toFixed(2) }}%</div>
               </div>
             </div>
           </div>
-          <div class="qsb-fade"></div>
         </div>
+        <div class="qsb-fade"></div>
+      </div>
 </template>
 
 <script>
@@ -30,9 +38,12 @@ import axios from 'axios'
 
 export default {
 
+    components: {
+    },
+
     created() {
         this.getPrice();
-        this.timer = setInterval(this.getPrice, 10000);
+        this.timer = setInterval(this.getPrice, 5000);
     },
 
     data: () => ({
@@ -52,9 +63,10 @@ export default {
             .catch(e => { this.errors.push(e)})
         },
 
-        percentValueStyler(value) { return {
-            'positivePct': value > 0,
-            'negativePct': value < 0
+        numberValueStyler(value) { return {
+            'price-positive': value > 0,
+            'price-negative': value < 0,
+            'price-neutral': value = 0,
           };
         },
 
@@ -82,4 +94,42 @@ export default {
     color: white;
   }
 }
+
+.symbol-pairs-long {
+  width: 120px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.price-positive {
+  color: #00ad6b;
+  background-color: transparent;
+  animation: pos-bgchange 2s ease-out;
+}
+@keyframes pos-bgchange {
+  from {
+    background-color: #00ad6b;
+    color: white;
+  } to {
+    background-color: transparent;
+    color: #00ad6b;
+  }
+}
+
+.price-negative {
+  color: #d9475a;
+  background-color: transparent;
+  animation: neg-bgchange 2s ease-out;
+}
+@keyframes neg-bgchange {
+  from {
+    background-color: #d9475a;
+    color: white;
+  } to {
+    background-color: transparent;
+    color: white;
+  }
+}
+
 </style>
