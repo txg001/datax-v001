@@ -1,83 +1,96 @@
 <template>
-  <div class="table">
-          <div class="table-toolbar">
-            <div class="pt-right">
-              <div class="category-selectors">
-                <div class="category-text">Category:</div>
-                <div class="selector-button active">
-                  <div>All</div>
-                </div>
-                <div class="selector-button">
-                  <div>DeFi</div>
-                </div>
-                <div class="selector-button">
-                  <div>Metaverse</div>
-                </div>
-                <div class="selector-button">
-                  <div>Stablecoins</div>
-                </div>
-              </div>
-            </div>
-            <div class="search-wrapper">
-              <div class="search-block w-form">
+<div class="table">
+    <div class="table-toolbar">
+      <div class="pt-right">
+        <div class="category-selectors">
+          <div class="category-text">Category:</div>
+          <a href="index.html" aria-current="page" class="button margin-right w-button w--current">All Coins</a>
+          <a href="#" class="button margin-right w-button">DeFi</a>
+          <a href="#" class="button margin-right w-button">Metaverse</a>
+          <a href="#" class="button margin-right w-button">Stablecoins</a>
+        </div>
+      </div>
+      <div class="search-wrapper">
+        <div class="search-block w-form">
 
-                 <input v-model="search" type="email" class="search-input w-input" placeholder="Search" id="Search-2" required="">
-                  <div class="div-block-2">/</div>
-  
-              </div>
-            </div>
+            <input v-model="search" class="search-input w-input" placeholder="Search" id="Search">
+            <div class="div-block-2">/</div>
+
+        </div>
+      </div>
+    </div>
+    <div class="table-head">
+      <div class="cell rank">
+        <div class="table-heading-text">#</div>
+      </div>
+      <div class="asset-cell xl">
+        <div class="table-heading-text">Name</div>
+      </div>
+      <div class="cell lplus">
+        <div class="table-heading-text">price / 24h change</div>
+      </div>
+      <div class="cell m">
+        <div class="table-heading-text">7D %</div>
+      </div>
+      <div class="cell m">
+        <div class="table-heading-text">30D %</div>
+      </div>
+      <div class="cell m">
+        <div class="table-heading-text">1Y %</div>
+      </div>
+      <div class="cell l">
+        <div class="table-heading-text">24h Volume</div>
+      </div>
+      <div class="cell l">
+        <div class="table-heading-text">Market Cap</div>
+      </div>
+      <div class="cell xl">
+        <div class="table-heading-text">circulating supply</div>
+      </div>
+    </div>
+    <div class="table-body">
+      <div class="table-row" v-for="(value) in filteredData" :key="value">
+        <div class="cell rank">
+          <div class="value rank">{{ value.market_cap_rank }}</div>
+        </div>
+        <div class="asset-cell xl">
+          <img :src="value.image" loading="lazy" alt="" class="asset-logo">
+          <div class="value assets-name">{{ value.name }}</div>
+          <div class="asset-ticker">{{ value.symbol }}</div>
+        </div>
+        <div class="cell lplus">
+          <div class="price-box">
+            <div class="value">{{ currencyFormatter( value.current_price )}}</div>
           </div>
-          <div class="table-head">
-            <div class="cell rank"><div class="table-heading-text">#</div></div>
-            <div class="asset-cell xl"><div class="table-heading-text">Name</div></div>
-            <div class="cell lplus"><div class="table-heading-text">price / 24h change</div></div>
-            <div class="cell l"><div class="table-heading-text">7d</div></div>
-            <div class="cell l"><div class="table-heading-text">1m</div></div>
-            <div class="cell l"><div class="table-heading-text">1m Volatility</div></div>
-            <div class="cell xl"><div class="table-heading-text">circulating supply</div></div>
-          </div>
-          <div class="table-body-copy">
-            <div class="table-row" v-for="value in filteredData" :key="value">
-              <div class="cell rank">
-                <div class="value rank">{{ value.market_cap_rank }}</div>
-              </div>
-              <div class="asset-cell xl">
-                  <img :src="value.image" loading="lazy" alt="" class="asset-logo">
-                <div class="value assets-name">{{ value.name }}</div>
-                <div class="asset-ticker">{{ value.symbol }}</div>
-              </div>
-              <div class="cell lplus">
-                <div class="price-box">
-                  <div class="dynamic-value" :key="value.current_price">{{ currencyFormatter( value.current_price ) }}</div>
-                </div>
-                <div class="div-block-3">
-                  <div :class="numberValueStyler(value.price_change_24h)">{{ currencyFormatter(value.price_change_24h) }}</div>
-                  <div :class="numberValueStyler(value.price_change_percentage_24h_in_currency)">{{ parseFloat(value.price_change_percentage_24h_in_currency).toFixed(2) }}%</div>
-                </div>
-              </div>
-              <div class="cell l">
-                <div :class="percentValueStylerLarge(value.price_change_percentage_7d_in_currency)">{{ parseFloat( value.price_change_percentage_7d_in_currency?.toLocaleString() ).toFixed(2) }}%</div>
-              </div>
-              <div class="cell l">
-                <div :class="percentValueStylerLarge(value.price_change_percentage_30d_in_currency)">{{ parseFloat( value.price_change_percentage_30d_in_currency?.toLocaleString() ).toFixed(2) }}%</div>
-              </div>
-              <div class="cell l">
-                    <div class="volatility-wrap">
-                      <div class="volatility-value">{{ Math.floor((value.datax.m1_vol) * 100) }}%</div>
-                      <div class="volatility-bar-wrapper" :style="{height: 4 +'px'}">
-                        <div :class="volatilityValueStyler( Math.floor(( value.datax.m1_vol ) * 100) )" :style="{width: Math.floor(( value.datax.m1_vol ) * 100)+'%'}"></div>
-                      </div>
-                    </div>
-                  </div>
-              <div class="cell xl">
-                  <div class="value small">{{ numAbbr(value.circulating_supply) }} {{ value.symbol.toUpperCase() }}</div>
-                  <div class="supply-bar-wrapper" :style="{height: 4 +'px'}">
-                    <div class="supply" :style="{width: Math.floor((value.circulating_supply / value.total_supply) * 100)+'%'}"></div>
-                  </div>
-                </div>
-            </div>
+          <div class="div-block-3">
+            <div :class="numberValueStyler(value.price_change_24h)">{{ currencyFormatter(value.price_change_24h) }}</div>
+            <div :class="numberValueStyler(value.price_change_percentage_24h_in_currency)">{{ parseFloat(value.price_change_percentage_24h_in_currency).toFixed(2) }}%</div>
           </div>
         </div>
+        <div class="cell m first">
+          <div :class="numberValueStyler(value.price_change_percentage_7d_in_currency)">{{ parseFloat(value.price_change_percentage_7d_in_currency).toFixed(2) }}%</div>
+        </div>
+        <div class="cell m">
+          <div :class="numberValueStyler(value.price_change_percentage_30d_in_currency)">{{ parseFloat(value.price_change_percentage_30d_in_currency).toFixed(2) }}%</div>
+        </div>
+        <div class="cell m">
+          <div :class="numberValueStyler(value.price_change_percentage_1y_in_currency)">{{ parseFloat(value.price_change_percentage_1y_in_currency).toFixed(2) }}%</div>
+        </div>
+        <div class="cell l">
+          <div class="value small">$49,474,059,394</div>
+        </div>
+        <div class="cell l">
+          <div class="value small">$796,345,809,078</div>
+        </div>
+        <div class="cell xl">
+          <div class="value small">18,983,345 BTC</div>
+          <div class="supply-bar-wrapper">
+            <div class="supply"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -86,7 +99,7 @@ import axios from 'axios'
 export default {
     created() {
         this.getPrice();
-        this.timer = setInterval(this.getPrice, 10000);
+        this.timer = setInterval(this.getPrice, 100000);
     },
 
     data: () => ({
@@ -138,9 +151,9 @@ export default {
         },
 
         numberValueStyler(value) { return {
-            'positiveNum': value > 0,
-            'negativeNum': value < 0,
-            'neutralNum': value = 0,
+            'price-positive': value > 0,
+            'price-negative': value < 0,
+            'price-neutral': value = 0,
           };
         },
 
@@ -158,18 +171,32 @@ export default {
 }
 </script>
 
-<style>
-.dynamic-value {
-  background-color: transparent;
-  color: white;
-  font-size: 12px;
+<style scoped>
+.price-positive {
+  padding-left: 8px;
+  color: #00ad6b;
   line-height: 18px;
-  font-weight: inherit;
-  animation: bgchange 3s;
+  background-color: transparent;
+  animation: pos-bgchange 2s ease-out;
 }
-@keyframes bgchange {
+@keyframes pos-bgchange {
   from {
-    background-color: green;
+    background-color: #00ad6b;
+    color: white;
+  } to {
+    background-color: transparent;
+    color: #00ad6b;
+  }
+}
+
+.price-negative {
+  color: #d9475a;
+  background-color: transparent;
+  animation: neg-bgchange 2s ease-out;
+}
+@keyframes neg-bgchange {
+  from {
+    background-color: #d9475a;
     color: white;
   } to {
     background-color: transparent;
@@ -354,5 +381,506 @@ export default {
   align-items: center;
   border-radius: 8px;
   line-height: 21px;
+}
+
+
+
+
+
+
+.table-head {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 7vh;
+  z-index: 10;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  height: 50px;
+  padding: 1rem;
+  -webkit-box-align: stretch;
+  -webkit-align-items: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+  border-bottom: 1px solid #434651;
+  background-color: rgba(42, 46, 57, 0.25);
+  box-shadow: none;
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+  color: #d1d4dc;
+  font-size: 10px;
+  font-weight: 400;
+  text-transform: capitalize;
+}
+
+.div-block-2 {
+  position: absolute;
+  left: auto;
+  top: 0%;
+  right: 0%;
+  bottom: 0%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  width: 21px;
+  height: 21px;
+  margin-top: auto;
+  margin-right: 10px;
+  margin-bottom: auto;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  border-radius: 4px;
+  background-color: rgba(201, 207, 221, 0.15);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.search-wrapper {
+  position: relative;
+}
+
+.asset-logo {
+  display: block !important;
+  width: 21px;
+  height: 21px;
+  margin-right: 10px;
+  border-top-left-radius: 100%;
+  border-top-right-radius: 100%;
+  border-bottom-left-radius: 100%;
+  border-bottom-right-radius: 100%;
+}
+
+.table-toolbar {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0px;
+  z-index: 10;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  height: 7vh;
+  padding-right: 1rem;
+  padding-left: 1rem;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  border-bottom: 1px solid #434651;
+  background-color: rgba(42, 46, 57, 0.51);
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+}
+
+.category-text {
+  margin-right: 0.8rem;
+  color: hsla(0, 0%, 100%, 0.5);
+  line-height: 14px;
+}
+
+.supply-bar-wrapper {
+  width: 120px;
+  height: 4px;
+  margin-top: 4px;
+  border-radius: 25px;
+  background-color: rgba(233, 235, 241, 0.1);
+}
+
+.div-block-3 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.category-selectors {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.value.rank {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  height: 24px;
+  padding-right: 8px;
+  padding-left: 8px;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  border-radius: 25%;
+  background-color: rgba(16, 18, 25, 0.6);
+  color: hsla(0, 0%, 100%, 0.5);
+  font-size: 10px;
+  line-height: 12px;
+}
+
+.value.assets-name {
+  margin-right: 6px;
+}
+
+.pt-right {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+}
+
+.value-positive {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  padding-left: 18px;
+  -webkit-box-pack: end;
+  -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  border-radius: 4px;
+  background-image: url('../assets/images/increase-icon.svg');
+  background-position: 0% 50%;
+  background-size: 13px;
+  background-repeat: no-repeat;
+  color: #00ad6b;
+}
+
+.table-row {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  padding: 1.2rem 1rem;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-transition: all 300ms ease-in-out;
+  transition: all 300ms ease-in-out;
+  color: #d1d4dc;
+  font-weight: 400;
+}
+
+.table-row:hover {
+  background-color: hsla(0, 0%, 100%, 0.05);
+}
+
+.table {
+  position: relative;
+  overflow: scroll;
+  height: 100vh;
+  min-height: 100vh;
+  padding-bottom: 1rem;
+  border-right: 1px solid #434651;
+  border-bottom: 1px solid #101219;
+  border-left: 1px solid #434651;
+  background-color: #1c1e29;
+}
+
+.supply {
+  width: 90.36%;
+  height: 100%;
+  border-radius: 25px;
+  background-color: #1b72e3;
+}
+
+.search-input {
+  width: 240px;
+  margin-bottom: 0px;
+  padding-left: 40px;
+  border: 1px none #000;
+  border-radius: 4px;
+  background-color: hsla(0, 0%, 100%, 0.1);
+  background-image: url('../assets/images/search.svg');
+  background-position: 12px 50%;
+  background-size: 18px;
+  background-repeat: no-repeat;
+  -webkit-transition: all 300ms ease-in-out;
+  transition: all 300ms ease-in-out;
+}
+
+.search-input:hover {
+  background-color: #353944;
+}
+
+.search-input::-webkit-input-placeholder {
+  color: #80868f;
+}
+
+.search-input:-ms-input-placeholder {
+  color: #80868f;
+}
+
+.search-input::-ms-input-placeholder {
+  color: #80868f;
+}
+
+.search-input::placeholder {
+  color: #80868f;
+}
+
+.price-box {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  padding: 0rem;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-align: end;
+  -webkit-align-items: flex-end;
+  -ms-flex-align: end;
+  align-items: flex-end;
+}
+
+.asset-ticker {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  opacity: 0.6;
+  color: #80868f;
+  text-transform: uppercase;
+}
+
+.search-block {
+  margin-bottom: 0px;
+  margin-left: 1rem;
+}
+
+.cell {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  width: 120px;
+  height: 100%;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: end;
+  -webkit-align-items: flex-end;
+  -ms-flex-align: end;
+  align-items: flex-end;
+}
+
+.cell.lplus {
+  width: 140px;
+}
+
+.cell.m {
+  width: 85px;
+}
+
+.cell.m.first {
+  width: 110px;
+}
+
+.cell.xl {
+  width: 150px;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: end;
+  -webkit-align-items: flex-end;
+  -ms-flex-align: end;
+  align-items: flex-end;
+}
+
+.cell.rank {
+  width: 40px;
+  -webkit-box-align: start;
+  -webkit-align-items: flex-start;
+  -ms-flex-align: start;
+  align-items: flex-start;
+  background-color: transparent;
+}
+
+.cell.l {
+  width: 140px;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: end;
+  -webkit-align-items: flex-end;
+  -ms-flex-align: end;
+  align-items: flex-end;
+}
+
+.asset-cell {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  width: 120px;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.asset-cell.xl {
+  width: 200px;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+}
+
+.body {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  background-color: #000;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-size: 12px;
+}
+
+.button {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  border-radius: 4px;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #adadad;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.button.w--current {
+  background-color: #1b72e3;
+  color: #fff;
+}
+
+.button.margin-right {
+  margin-right: 6px;
+}
+
+.small-value-positive {
+  padding-left: 8px;
+  color: #00ad6b;
+  line-height: 18px;
+}
+
+@media screen and (max-width: 991px) {
+  .table {
+    border-top: 1px solid #373a45;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .cell.m {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 479px) {
+  .cell.xl {
+    display: none;
+  }
+
+  .cell.l {
+    display: none;
+  }
 }
 </style>
