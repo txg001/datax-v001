@@ -1,27 +1,40 @@
 <template>
   <div class="hotbar">
     <div class="toolbar">
-      <a href="index.html" aria-current="page" class="button w-button w--current">Top Movers</a>
-      <a href="#" class="button middle w-button">Large Trades</a>
+      <a v-on:click="toggle()" class="button w-button">Top Movers</a>
+      <a v-on:click="toggle1()" class="button middle w-button">Large Trades</a>
       <div class="connection-info">
         <div class="status-circle"></div>
         <div>Connected</div>
       </div>
     </div>
     <div class="main-wrap">
-      <GreatestGainers />
+      <component v-bind:is="component" />
     </div>
   </div>
 </template>
 
 <script>
+import LargeTrades from "./LargeTrades.vue";
 import GreatestGainers from "./GreatestGainers.vue";
 
 export default {
-    components: {
-    GreatestGainers
-}
 
+  data (){
+    return {
+      component: 'GreatestGainers',
+      isActive: false,
+    }
+  },
+
+  methods: {
+    toggle() {
+      this.component = GreatestGainers;
+    },
+    toggle1() {
+      this.component = LargeTrades;
+    }
+  },
 }
 </script>
 
@@ -47,12 +60,13 @@ export default {
 
 .toolbar {
   display: flex;
-  height: 65.5px;
-  padding-top: 0.5rem;
-  padding-right: 0.5rem;
-  padding-bottom: 0.5rem;
-  padding-left: 0.5rem;
+  height: 7vh;
+  padding-right: 1rem;
+  padding-left: 1rem;
   align-items: center;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-bottom-color: #434651;
 }
 
 .icon {
@@ -89,6 +103,10 @@ export default {
   white-space: nowrap;
 }
 
+.button:focus {
+  background: #1b72e3;
+}
+
 .button.w--current {
   background-color: #1b72e3;
   color: #fff;
@@ -97,6 +115,10 @@ export default {
 .button.middle {
   margin-right: 6px;
   margin-left: 6px;
+}
+
+.button.middle:focus {
+  background: #1b72e3;
 }
 
 .connection-info {

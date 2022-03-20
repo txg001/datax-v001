@@ -27,25 +27,28 @@
         <div class="table-heading-text">Name</div>
       </div>
       <div class="cell lplus">
-        <div class="table-heading-text">price / 24h change</div>
+        <div class="table-heading-text">price / 1h change</div>
+      </div>
+      <div class="cell m first">
+        <div class="table-heading-text">24h %</div>
       </div>
       <div class="cell m">
         <div class="table-heading-text">7D %</div>
       </div>
       <div class="cell m">
-        <div class="table-heading-text">30D %</div>
-      </div>
-      <div class="cell m">
         <div class="table-heading-text">1Y %</div>
       </div>
-      <div class="cell l">
-        <div class="table-heading-text">24h Volume</div>
+      <div class="cell m first">
+        <div class="table-heading-text">24h Vol</div>
+      </div>
+      <div class="cell m">
+        <div class="table-heading-text">Mkt Cap</div>
       </div>
       <div class="cell l">
-        <div class="table-heading-text">Market Cap</div>
-      </div>
-      <div class="cell xl">
         <div class="table-heading-text">circulating supply</div>
+      </div>
+      <div class="cell l">
+        <div class="table-heading-text">7D Chart</div>
       </div>
     </div>
     <div class="table-body">
@@ -60,33 +63,36 @@
         </div>
         <div class="cell lplus">
           <div class="price-box">
-            <div class="value">{{ currencyFormatter( value.current_price )}}</div>
+            <div class="value">${{ currency( value.current_price ) }}</div>
           </div>
           <div class="div-block-3">
-            <div :class="numberValueStyler(value.price_change_24h)">{{ currencyFormatter(value.price_change_24h) }}</div>
-            <div :class="numberValueStyler(value.price_change_percentage_24h_in_currency)">{{ parseFloat(value.price_change_percentage_24h_in_currency).toFixed(2) }}%</div>
+            <div :class="numberValueStyler(value.price_change_24h)">{{ currency(value.price_change_24h) }}</div>
+            <div :class="numberValueStyler(value.price_change_percentage_1h_in_currency)">{{ parseFloat(value.price_change_percentage_1h_in_currency).toFixed(4) }}%</div>
           </div>
         </div>
         <div class="cell m first">
-          <div :class="numberValueStyler(value.price_change_percentage_7d_in_currency)">{{ parseFloat(value.price_change_percentage_7d_in_currency).toFixed(2) }}%</div>
+          <div :class="numberValueStyler(value.price_change_percentage_24h_in_currency)">{{ parseFloat(value.price_change_percentage_24h_in_currency).toFixed(2) }}%</div>
         </div>
         <div class="cell m">
-          <div :class="numberValueStyler(value.price_change_percentage_30d_in_currency)">{{ parseFloat(value.price_change_percentage_30d_in_currency).toFixed(2) }}%</div>
+          <div :class="numberValueStyler(value.price_change_percentage_7d_in_currency)">{{ parseFloat(value.price_change_percentage_7d_in_currency).toFixed(2) }}%</div>
         </div>
         <div class="cell m">
           <div :class="numberValueStyler(value.price_change_percentage_1y_in_currency)">{{ parseFloat(value.price_change_percentage_1y_in_currency).toFixed(2) }}%</div>
         </div>
-        <div class="cell l">
-          <div class="value small">$49,474,059,394</div>
+        <div class="cell m first">
+          <div class="value small">${{ numAbbr(value.total_volume) }}</div>
+        </div>
+        <div class="cell m">
+          <div class="value small">${{ numAbbr(value.market_cap) }}</div>
         </div>
         <div class="cell l">
-          <div class="value small">$796,345,809,078</div>
-        </div>
-        <div class="cell xl">
-          <div class="value small">18,983,345 BTC</div>
-          <div class="supply-bar-wrapper">
-            <div class="supply"></div>
-          </div>
+              <div class="value small">{{ numAbbr(value.circulating_supply) }} {{ value.symbol.toUpperCase() }}</div>
+              <div class="supply-bar-wrapper" :style="{height: 4 +'px'}">
+                <div class="supply" :style="{width: Math.floor((value.circulating_supply / value.total_supply) * 100)+'%'}"></div>
+              </div>
+            </div>
+        <div class="cell l">
+          <sparkline v-bind:data="[2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31]"></sparkline>
         </div>
       </div>
     </div>
@@ -94,12 +100,19 @@
 </template>
 
 <script>
+import Sparkline from './Sparkline.vue'
 import axios from 'axios'
 
+
 export default {
+
+    components: {
+      Sparkline
+    },
+
     created() {
         this.getPrice();
-        this.timer = setInterval(this.getPrice, 100000);
+        this.timer = setInterval(this.getPrice, 10000);
     },
 
     data: () => ({
@@ -122,9 +135,9 @@ export default {
     methods: {
         async getPrice() {
             axios
-            .get('https://coindata.ddns.net/scripts/coinstats.php')
+            .get('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=true&price_change_percentage=1h%2C24h%2C7d%2C14d%2C30d%2C200d%2C1y')
             .then(response => { 
-              this.coins = response.data; 
+              this.coins = response.data;
               console.log(response.data)
             })
             .catch(e => { this.errors.push(e)})
@@ -157,6 +170,10 @@ export default {
           };
         },
 
+        currency(value) {
+            return new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 6 }).format(value);
+        },
+
         numAbbr(value) {
             if (value >= 1000000000) { return (value / 1000000000).toFixed(2).replace(/\.0$/, '') + 'B'; }
             if (value >= 1000000) { return (value / 1000000).toFixed(2).replace(/\.0$/, '') + 'M'; }
@@ -164,7 +181,8 @@ export default {
             return value;
         },
 
-        currencyFormatter(value) { return value?.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+        currencyFormatter(value) { 
+            return value?.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
         },
     },
 
@@ -175,7 +193,6 @@ export default {
 .price-positive {
   padding-left: 8px;
   color: #00ad6b;
-  line-height: 18px;
   background-color: transparent;
   animation: pos-bgchange 2s ease-out;
 }
@@ -190,6 +207,7 @@ export default {
 }
 
 .price-negative {
+  padding-left: 8px;
   color: #d9475a;
   background-color: transparent;
   animation: neg-bgchange 2s ease-out;
@@ -492,7 +510,7 @@ export default {
 }
 
 .supply-bar-wrapper {
-  width: 120px;
+  width: 100px;
   height: 4px;
   margin-top: 4px;
   border-radius: 25px;
@@ -726,11 +744,11 @@ export default {
 }
 
 .cell.m {
-  width: 85px;
+  width: 80px;
 }
 
 .cell.m.first {
-  width: 110px;
+  width: 90px;
 }
 
 .cell.xl {

@@ -18,10 +18,10 @@
             </div>
             <div class="w-layout-grid price-data-grid">
               <div id="w-node-fdc8b29f-7693-d8e9-ba29-ada352c6f265-6bd61ad4" class="data-cell">
-                <div class="price">{{ currencyFormatter( value.current_price )}}</div>
+                <div class="price">${{ currency( value.current_price )}}</div>
               </div>
               <div id="w-node-_472e4662-8626-fde2-c00d-a7a47f6158f0-6bd61ad4" class="data-cell">
-                <div :key="parseFloat(value.price_change_24h).toFixed(4)" :class="numberValueStyler(value.price_change_24h)">{{ parseFloat(value.price_change_24h).toFixed(4) }}</div>
+                <div :key="value.price_change_24h" :class="numberValueStyler(value.price_change_24h)">{{ currency(value.price_change_24h) }}</div>
               </div>
               <div id="w-node-_2c4cd426-a529-68bf-34ab-7a7f57ee277d-6bd61ad4" class="data-cell">
                 <div :key="value.price_change_percentage_24h_in_currency" :class="numberValueStyler(value.price_change_percentage_24h_in_currency)">{{ parseFloat( value.price_change_percentage_24h_in_currency?.toLocaleString() ).toFixed(2) }}%</div>
@@ -43,7 +43,7 @@ export default {
 
     created() {
         this.getPrice();
-        this.timer = setInterval(this.getPrice, 5000);
+        this.timer = setInterval(this.getPrice, 10000);
     },
 
     data: () => ({
@@ -70,7 +70,8 @@ export default {
           };
         },
 
-        currencyFormatter(value) { return value?.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+        currency(value) {
+            return new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 4 }).format(value);
         },
     },
 
@@ -260,18 +261,13 @@ export default {
   z-index: 10;
   display: flex;
   height: 50px;
-  padding-top: 0.8rem;
   padding-right: 1rem;
-  padding-bottom: 0.8rem;
   padding-left: 1rem;
   justify-content: space-between;
   align-items: center;
-  border-top-style: solid;
-  border-top-width: 1px;
-  border-top-color: #434651;
   border-bottom-style: solid;
   border-bottom-width: 1px;
-  border-bottom-color: #434651;
+  border-bottom-color: @swatch_2e665c84;
   background-color: hsla(224, 15.15%, 19.41%, 0.70);
   backdrop-filter: blur(5px);
   color: white;
@@ -284,6 +280,7 @@ export default {
   grid-row-gap: 4px;
   grid-template-areas: "Area Area"
     "Area-2 Area-3";
+  grid-template-columns: max-content;
 }
 
 .asset-data-grid {
