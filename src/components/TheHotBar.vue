@@ -1,44 +1,48 @@
 <template>
   <div class="hotbar">
     <div class="toolbar">
-      <a v-on:click="toggle()" class="button w-button">Top Movers</a>
-      <a v-on:click="toggle1()" class="button middle w-button">Large Trades</a>
+      <button :class="{ active: type === 'GreatestGainers' }" class="button w-button" @click="type = 'GreatestGainers'">Top Movers</button>
+      <button :class="{ active: type === 'LargeTrades' }" class="button middle w-button" @click="type = 'LargeTrades'">Large Trades</button>
       <div class="connection-info">
         <div class="status-circle"></div>
         <div>Connected</div>
       </div>
     </div>
     <div class="main-wrap">
-      <component v-bind:is="component" />
+      <div v-if="type === 'GreatestGainers'">
+        <GreatestGainers />
+      </div>
+      <div v-else-if="type === 'LargeTrades'">
+        <LargeTrades />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import LargeTrades from "./LargeTrades.vue";
 import GreatestGainers from "./GreatestGainers.vue";
+import LargeTrades from "./LargeTrades.vue";
+
 
 export default {
-
-  data (){
+  data: function () {
     return {
-      component: 'GreatestGainers',
-      isActive: false,
-    }
+      type: 'GreatestGainers',
+      isActive: true
+    };
   },
-
-  methods: {
-    toggle() {
-      this.component = GreatestGainers;
-    },
-    toggle1() {
-      this.component = LargeTrades;
-    }
+  components: {
+    GreatestGainers,
+    LargeTrades
   },
 }
 </script>
 
 <style scoped>
+.active.button.w-button {
+  background-color: #1b72e3;
+  color: white;
+}
 .hotbar {
   display: -webkit-box;
   display: -webkit-flex;
@@ -80,31 +84,27 @@ export default {
 }
 
 .button {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
   justify-content: center;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-  -ms-flex-align: center;
   align-items: center;
-  -webkit-box-flex: 1;
-  -webkit-flex: 1;
-  -ms-flex: 1;
-  flex: 1;
-  border-radius: 4px;
-  background-color: rgba(255, 255, 255, 0.1);
-  color: #adadad;
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: 0%;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+  background-color: hsla(213.89999999999998, 0.00%, 100.00%, 0.10);
+  transition-property: all;
+  transition-duration: 300ms;
+  transition-timing-function: ease-in-out;
+  color: hsla(216, 0.00%, 68.00%, 1.00);
   text-align: center;
   white-space: nowrap;
 }
 
-.button:focus {
-  background: #1b72e3;
+.button:hover {
+  background-color: hsla(213.89999999999998, 0.00%, 100.00%, 0.05);
 }
 
 .button.w--current {
