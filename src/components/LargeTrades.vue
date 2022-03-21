@@ -3,7 +3,8 @@
         <div class="qsb-header">
           <div class="qsb-header-left">
             <div>Large BTC Trades</div>
-          </div><img src="images/last-24-hours-96_1last-24-hours-96.png" loading="lazy" alt="" class="qsbh-icon">
+          </div>
+          <img src="../assets/images/last-24-hours-96_1last-24-hours-96.png" loading="lazy" alt="" class="qsbh-icon">
         </div>
         <div class="top-gainers">
           <div class="tg-item" v-for="trades in trades" :key="trades">
@@ -32,7 +33,7 @@ export default {
 
     created() {
         this.getTrades();
-        this.timer = setInterval(this.getTrades, 3000);
+        this.timer = setInterval(this.getTrades, 30000);
     },
 
     data: () => ({

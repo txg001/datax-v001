@@ -43,7 +43,7 @@ export default {
 
     created() {
         this.getPrice();
-        this.timer = setInterval(this.getPrice, 10000);
+        this.timer = setInterval(this.getPrice, 30000);
     },
 
     data: () => ({
