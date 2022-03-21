@@ -1,20 +1,27 @@
 <template>
   <div class="hotbar">
-    <div class="toolbar">
-      <button :class="{ active: type === 'GreatestGainers' }" class="button w-button" @click="type = 'GreatestGainers'">Top Movers</button>
-      <button :class="{ active: type === 'LargeTrades' }" class="button middle w-button" @click="type = 'LargeTrades'">Large Trades</button>
+    
+    
+
+
+  <div class="toolbar">
+
+          <select v-model="current" id="field" name="field" data-name="Field" class="select-field w-select">
+            <option value="GreatestGainers">Top Movers</option>
+            <option value="LargeTrades">Large Trades </option>
+          </select>
+
+      
       <div class="connection-info">
         <div class="status-circle"></div>
         <div>Connected</div>
       </div>
     </div>
+
     <div class="main-wrap">
-      <div v-if="type === 'GreatestGainers'">
-        <GreatestGainers />
-      </div>
-      <div v-else-if="type === 'LargeTrades'">
-        <LargeTrades />
-      </div>
+      <keep-alive>
+        <component :is="current"></component>
+      </keep-alive>
     </div>
   </div>
 </template>
@@ -25,9 +32,9 @@ import LargeTrades from "./LargeTrades.vue";
 
 
 export default {
-  data: function () {
+  data() {
     return {
-      type: 'GreatestGainers',
+      current: 'GreatestGainers',
       isActive: true
     };
   },
@@ -39,6 +46,39 @@ export default {
 </script>
 
 <style scoped>
+select {
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+  }
+
+  .w-select {
+  display: block;
+  width: 100%;
+  height: 38px;
+  padding: 8px 12px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  line-height: 1.428571429;
+  color: #333333;
+  vertical-align: middle;
+  background-color: #ffffff;
+  border: 1px solid #cccccc;
+}
+
+.select-field {
+  margin-bottom: 0px;
+  padding: 9px 1rem;
+  border: 1px none #000;
+  border-radius: 4px;
+  background-color: hsla(0, 0%, 100%, 0.1);
+  background-image: url('../assets/images/chevron-down-3.svg');
+  background-position: 95% 50%;
+  background-size: 12px;
+  background-repeat: no-repeat;
+  color: #fff;
+  font-size: 12px;
+}
 .active.button.w-button {
   background-color: #1b72e3;
   color: white;
