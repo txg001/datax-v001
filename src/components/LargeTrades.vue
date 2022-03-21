@@ -1,22 +1,24 @@
 <template>
-  <div class="qs-block">
+<div class="qs-block">
         <div class="qsb-header">
           <div class="qsb-header-left">
             <div>Large BTC Trades</div>
-          </div>
-          <img src="../assets/images/last-24-hours-96_1last-24-hours-96.png" loading="lazy" alt="" class="qsbh-icon">
+          </div><img src="../assets/images/last-24-hours-96_1last-24-hours-96.png" loading="lazy" alt="" class="qsbh-icon">
         </div>
         <div class="top-gainers">
-          <div class="tg-item" v-for="trades in trades" :key="trades">
-            <div class="w-layout-grid large-trade-grid">
-              <div id="w-node-b736b7d6-0c81-c102-1fde-dd42ddff419b-53bf46aa" class="data-cell">
-                <div class="price">BTCUSD</div>
-                <div class="price">Bitcoin / TetherUS</div>
-              </div>
-              <div id="w-node-_2c7ab8d7-3d94-eb89-3828-6f933102b1d1-53bf46aa" class="data-cell">
-                <div class="price">{{ trades.quoteQty }}</div>
-                <div class="price">{{ trades.qty }} BTC</div>
-              </div>
+          <div v-for="trades in trades" :key="trades">
+            <div class="tg-item" :class="tradeDivStyler(trades.isBuyerMaker)">
+                <div id="large-trade-grid" class="w-layout-grid large-trade-grid">
+
+                    <div id="w-node-b736b7d6-0c81-c102-1fde-dd42ddff419b-53bf46aa" class="price">Bitcoin / TetherUS</div>
+
+                    <div id="w-node-d151583d-501a-6422-e21c-34b6c702c152-53bf46aa" class="symbol-pairs-long">Binance.com</div>
+
+                    <div id="w-node-_2c7ab8d7-3d94-eb89-3828-6f933102b1d1-53bf46aa" class="value-neutral">${{ currency(trades.quoteQty) }}</div>
+
+                    <div id="w-node-_13624f79-b1df-26d4-3048-2a57bbdce1f8-53bf46aa" class="symbol-pairs-long">{{ trades.qty }} BTC</div>
+
+                </div>
             </div>
           </div>
         </div>
@@ -33,13 +35,14 @@ export default {
 
     created() {
         this.getTrades();
-        this.timer = setInterval(this.getTrades, 30000);
+        this.timer = setInterval(this.getTrades, 3000);
     },
 
     data: () => ({
         trades: [],
         errors: [],
         timer: [],
+        isMarketMaker: true
     }),
 
     methods: {
@@ -53,6 +56,23 @@ export default {
             .catch(e => { this.errors.push(e)})
         },
 
+        tradeDivStyler(value) { 
+            return {
+            'market-maker': value === true,
+            'market-taker': value === false
+          };
+        },
+
+        largeTradeFilter(value) { 
+            return {
+            't10000': value > 10000,
+            'market-taker': value === false
+          };
+        },
+
+        currency(value) {
+            return new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 4 }).format(value);
+        },
 
     },
 
@@ -60,6 +80,12 @@ export default {
 </script>
 
 <style scoped>
+.market-maker {
+    background-color: hsla(157, 100%, 34%, 0.1);
+}
+.market-taker {
+    background-color: hsla(352, 66%, 56%, 0.1);
+}
 .w-layout-grid {
   display: -ms-grid;
   display: grid;
@@ -86,6 +112,7 @@ export default {
   -webkit-align-items: stretch;
   -ms-flex-align: stretch;
   align-items: stretch;
+  border-bottom: 1px solid #1c1e29;
   -webkit-transition: background-color 300ms ease-in-out;
   transition: background-color 300ms ease-in-out;
   color: #d1d4dc;
@@ -94,6 +121,14 @@ export default {
 
 .tg-item:hover {
   background-color: hsla(0, 0%, 100%, 0.05);
+}
+
+.tg-item.buy {
+  background-color: rgba(0, 173, 107, 0.1);
+}
+
+.tg-item.sell {
+  background-color: rgba(217, 71, 90, 0.1);
 }
 
 .hotbar {
@@ -215,6 +250,8 @@ export default {
   -ms-flex-pack: center;
   justify-content: center;
   background-color: #000;
+  -webkit-transition: all 300ms ease-in-out;
+  transition: all 300ms ease-in-out;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   font-size: 12px;
 }
@@ -232,16 +269,6 @@ export default {
   -ms-flex-align: center;
   align-items: center;
   border-bottom: 1px solid #434651;
-}
-
-.icon {
-  width: 20px;
-  height: 20px;
-  margin-right: 0.8rem;
-}
-
-.icon.green {
-  color: #00ad6b;
 }
 
 .button {
@@ -263,9 +290,15 @@ export default {
   flex: 1;
   border-radius: 4px;
   background-color: rgba(255, 255, 255, 0.1);
+  -webkit-transition: all 300ms ease-in-out;
+  transition: all 300ms ease-in-out;
   color: #adadad;
   text-align: center;
   white-space: nowrap;
+}
+
+.button:hover {
+  background-color: rgba(255, 255, 255, 0.05);
 }
 
 .button.w--current {
@@ -302,9 +335,71 @@ export default {
 
 .large-trade-grid {
   width: 100%;
-  grid-template-areas: "Area Area-2";
-  -ms-grid-rows: auto;
-  grid-template-rows: auto;
+  height: 40px;
+  grid-column-gap: 16px;
+  grid-row-gap: 0px;
+  grid-template-areas: "Area Area-2"
+    "Area-3 Area-4";
+  -ms-grid-columns: -webkit-max-content 16px 1fr;
+  -ms-grid-columns: max-content 16px 1fr;
+  grid-template-columns: -webkit-max-content 1fr;
+  grid-template-columns: max-content 1fr;
+  -ms-grid-rows: auto 0px auto;
+  grid-template-rows: auto auto;
+}
+
+.symbol-pairs-long {
+  color: rgba(209, 212, 220, 0.6);
+}
+
+.value-neutral {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: end;
+  -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  border-radius: 4px;
+  color: white;
+}
+.value-increase {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: end;
+  -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  border-radius: 4px;
+  color: #00ad6b;
+}
+
+.value-decrease {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: end;
+  -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  border-radius: 4px;
+  color: #d9475a;
 }
 
 @media screen and (max-width: 991px) {
@@ -329,28 +424,62 @@ export default {
 }
 
 #w-node-b736b7d6-0c81-c102-1fde-dd42ddff419b-53bf46aa {
+  -ms-grid-row: 1;
+  -ms-grid-column: 1;
   -ms-grid-column-align: start;
   justify-self: start;
-  -ms-grid-column: span 1;
-  grid-column-start: span 1;
-  -ms-grid-column-span: 1;
-  grid-column-end: span 1;
-  -ms-grid-row: span 1;
-  grid-row-start: span 1;
-  -ms-grid-row-span: 1;
-  grid-row-end: span 1;
+  grid-area: Area;
 }
 
 #w-node-_2c7ab8d7-3d94-eb89-3828-6f933102b1d1-53bf46aa {
+  -ms-grid-row: 1;
+  -ms-grid-column: 3;
   -ms-grid-column-align: end;
   justify-self: end;
-  -ms-grid-column: span 1;
-  grid-column-start: span 1;
-  -ms-grid-column-span: 1;
-  grid-column-end: span 1;
-  -ms-grid-row: span 1;
-  grid-row-start: span 1;
-  -ms-grid-row-span: 1;
-  grid-row-end: span 1;
+  grid-area: Area-2;
+}
+
+#w-node-d151583d-501a-6422-e21c-34b6c702c152-53bf46aa {
+  -ms-grid-row: 3;
+  -ms-grid-column: 1;
+  grid-area: Area-3;
+}
+
+#w-node-_13624f79-b1df-26d4-3048-2a57bbdce1f8-53bf46aa {
+  -ms-grid-row: 3;
+  -ms-grid-column: 3;
+  -ms-grid-column-align: end;
+  justify-self: end;
+  grid-area: Area-4;
+}
+
+#w-node-_6e885065-b5e7-097a-969c-411abdca1806-53bf46aa {
+  -ms-grid-row: 1;
+  -ms-grid-column: 1;
+  -ms-grid-column-align: start;
+  justify-self: start;
+  grid-area: Area;
+}
+
+#w-node-_6e885065-b5e7-097a-969c-411abdca1809-53bf46aa {
+  -ms-grid-row: 1;
+  -ms-grid-column: 3;
+  -ms-grid-column-align: end;
+  justify-self: end;
+  grid-area: Area-2;
+}
+
+#w-node-_6e885065-b5e7-097a-969c-411abdca180c-53bf46aa {
+  -ms-grid-row: 3;
+  -ms-grid-column: 1;
+  grid-area: Area-3;
+}
+
+#w-node-_6e885065-b5e7-097a-969c-411abdca180e-53bf46aa {
+  -ms-grid-row: 3;
+  -ms-grid-column: 3;
+  -ms-grid-column-align: end;
+  justify-self: end;
+  grid-area: Area-4;
 }
 </style>
