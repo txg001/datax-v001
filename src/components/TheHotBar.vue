@@ -68,7 +68,7 @@ select {
 
 .select-field {
   margin-bottom: 0px;
-  margin-right: 1rem;
+  margin-right: 12px;
   padding: 9px 1rem;
   border: 1px none #000;
   border-radius: 4px;
