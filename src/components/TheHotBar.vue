@@ -68,6 +68,7 @@ select {
 
 .select-field {
   margin-bottom: 0px;
+  margin-right: 1rem;
   padding: 9px 1rem;
   border: 1px none #000;
   border-radius: 4px;
@@ -166,12 +167,17 @@ select {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  padding-right: 1rem;
-  padding-left: 1rem;
+  padding: 9px 12px;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
   -webkit-box-align: center;
   -webkit-align-items: center;
   -ms-flex-align: center;
   align-items: center;
+  border-radius: 4px;
+  background-color: rgba(0, 173, 107, 0.1);
   color: #00ad6b;
 }
 
