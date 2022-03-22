@@ -1,27 +1,21 @@
 <template>
   <div class="hotbar">
-    
-    
-
-
-  <div class="toolbar">
-
-          <select v-model="current" id="field" name="field" data-name="Field" class="select-field w-select">
-            <option value="GreatestGainers">Top Movers</option>
-            <option value="LargeTrades">Large Trades </option>
-          </select>
-
-      
+    <div class="toolbar">
+      <select v-model="current" id="field" name="field" data-name="Field" class="select-field w-select">
+        <option value="GreatestGainers">Top Movers</option>
+        <option value="LargeTrades">Large Trades </option>
+      </select>
       <div class="connection-info">
         <div class="status-circle"></div>
         <div>Connected</div>
       </div>
     </div>
-
     <div class="main-wrap">
-      <keep-alive>
-        <component :is="current"></component>
-      </keep-alive>
+      <Transition name="fade" mode="out-in">
+        <keep-alive>
+          <component :is="current"></component>
+        </keep-alive>
+      </Transition>
     </div>
   </div>
 </template>
@@ -46,6 +40,17 @@ export default {
 </script>
 
 <style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.1s ease-in;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+
 select {
     appearance: none !important;
     -webkit-appearance: none !important;
