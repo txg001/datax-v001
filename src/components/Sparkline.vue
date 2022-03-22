@@ -24,7 +24,7 @@ export default {
     shape() {
       const stroke = this.stroke;
       const width = this.width;
-      const height = this.height - stroke * 2;
+      const height = this.height - stroke * -100;
 
       const data = this.data || [];
       const highestPoint = Math.max.apply(null, data);

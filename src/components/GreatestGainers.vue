@@ -43,7 +43,7 @@ export default {
 
     created() {
         this.getPrice();
-        this.timer = setInterval(this.getPrice, 60000);
+        this.timer = setInterval(this.getPrice, 30000);
     },
 
     data: () => ({
@@ -55,7 +55,7 @@ export default {
     methods: {
         async getPrice() {
             axios
-            .get('https://coindata.ddns.net/scripts/coinstats.php')
+            .get('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false&price_change_percentage=1h%2C24h%2C7d')
             .then(response => { 
               this.coins = response.data.sort((b, a) => parseFloat(a.price_change_percentage_24h_in_currency) - parseFloat(b.price_change_percentage_24h_in_currency)); 
               console.log(response.data)

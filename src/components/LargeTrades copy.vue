@@ -12,19 +12,18 @@
             </select>
         </div>
         <div class="top-gainers">
-          <div v-for="(data) in filteredTrades.slice().reverse()" :key="data.id">
+          <div v-for="trades in filteredTrades" :key="trades">
 
-            <div class="tg-item" :class="tradeDivStyler(data.m)">
+            <div class="tg-item" :class="tradeDivStyler(trades.isBuyerMaker)">
               <div id="large-trade-grid" class="w-layout-grid large-trade-grid">
                 <div id="w-node-b736b7d6-0c81-c102-1fde-dd42ddff419b-53bf46aa" class="data-cell">
                   <div class="text">Bitcoin / TetherUS</div>
                   <div class="muted-text">Binance.com</div>
-                  <div class="muted-text small">{{ data.E }}</div>
+                  <div class="muted-text small">{{ trades.time }}</div>
                 </div>
                 <div id="w-node-_2c7ab8d7-3d94-eb89-3828-6f933102b1d1-53bf46aa" class="data-cell-right">
-                  <div class="muted-text">{{ data.t }}</div>
-                  <div class="text-price">${{ Math.floor(data.p * data.q).toLocaleString() }}</div>
-                  <div class="muted-text">{{ data.q }} BTC</div>
+                  <div class="text">${{ currency(trades.quoteQty) }}</div>
+                  <div class="muted-text">{{ trades.qty }} BTC</div>
                 </div>
               </div>
             </div>
@@ -36,52 +35,40 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
 
     components: {
     },
 
     created() {
-        this.getTradeStream();
+        this.getTrades();
+        this.timer = setInterval(this.getTrades, 3000);
     },
 
     data: () => ({
+        trades: [],
         errors: [],
+        timer: [],
         isMarketMaker: true,
         tradeFilter: 0,
-        connection: null,
-        tradeDataList: [],
     }),
 
     computed: {
       filteredTrades() {
-              return this.tradeDataList.filter(data => Math.floor(data.p * data.q) > this.tradeFilter);
+              return this.trades.filter(trades => trades.quoteQty > this.tradeFilter);
       }
     },
 
     methods: {
-
-        getTradeStream() {
-          console.log("Starting connection to WebSocket Server");
-          this.connection = new WebSocket("wss://stream.binance.com:9443/ws/btcusdt@trade");
-
-          this.connection.addEventListener("message", (event) => {
-
-            let tradeDataString = event.data;
-
-            let parsedData = JSON.parse(tradeDataString);
-            
-            // push new item to array
-            this.tradeDataList.push(parsedData);
-            
-            // keep only last 10
-            this.tradeDataList = this.tradeDataList.slice(Math.max(this.tradeDataList.length - 1000, 0))
-          });
-
-          this.connection.onopen = function(event) {
-            console.log(event);
-            console.log("Successfully connected to the echo websocket server...");
-          };
+        async getTrades() {
+            axios
+            .get('https://api.binance.com/api/v3/trades?symbol=BTCUSDT')
+            .then(response => { 
+              this.trades = response.data; 
+              console.log(response.data)
+            })
+            .catch(e => { this.errors.push(e)})
         },
 
         tradeDivStyler(value) { 
@@ -122,12 +109,6 @@ export default {
   grid-area: Area-2;
 }
 .text {
-  color: #d1d4dc;
-}
-.text-price {
-  font-size: 13px;
-  font-weight: 600;
-  line-height: 22.5px;
   color: #d1d4dc;
 }
 

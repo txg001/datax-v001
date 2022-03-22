@@ -92,7 +92,7 @@
               </div>
             </div>
         <div class="cell l">
-          <sparkline v-bind:data="value.sparkline_in_7d.price"></sparkline>
+          <sparkline v-bind:data="this.coins[0].sparkline_in_7d.price"></sparkline>
         </div>
       </div>
     </div>

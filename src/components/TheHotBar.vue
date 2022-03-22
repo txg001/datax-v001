@@ -1,7 +1,7 @@
 <template>
   <div class="hotbar">
     <div class="toolbar">
-      <select v-model="current" id="field" name="field" data-name="Field" class="select-field w-select">
+      <select v-model="current" id="field" name="field" data-name="Field" class="select-field">
         <option value="GreatestGainers">Top Movers</option>
         <option value="LargeTrades">Large Trades </option>
       </select>
@@ -57,24 +57,10 @@ select {
     -moz-appearance: none !important;
   }
 
-  .w-select {
-  display: block;
-  width: 100%;
-  height: 38px;
-  padding: 8px 12px;
-  margin-bottom: 10px;
-  font-size: 14px;
-  line-height: 1.428571429;
-  color: #333333;
-  vertical-align: middle;
-  background-color: #ffffff;
-  border: 1px solid #cccccc;
-}
-
 .select-field {
   margin-bottom: 0px;
   margin-right: 12px;
-  padding: 9px 1rem;
+  padding: 9px 2rem 9px 1rem;
   border: 1px none #000;
   border-radius: 4px;
   background-color: hsla(0, 0%, 100%, 0.1);
@@ -113,6 +99,7 @@ select {
   height: 7vh;
   padding-right: 1rem;
   padding-left: 1rem;
+  justify-content: space-between;
   align-items: center;
   border-bottom-style: solid;
   border-bottom-width: 1px;
