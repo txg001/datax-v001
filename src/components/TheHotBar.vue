@@ -4,6 +4,7 @@
       <select v-model="current" id="field" name="field" data-name="Field" class="select-field">
         <option value="GreatestGainers">Top Movers</option>
         <option value="LargeTrades">Large Trades </option>
+        <option value="LiquidationMonitor">Liquidation Monitor </option>
       </select>
       <div class="connection-info">
         <div class="status-circle"></div>
@@ -23,6 +24,7 @@
 <script>
 import GreatestGainers from "./GreatestGainers.vue";
 import LargeTrades from "./LargeTrades.vue";
+import LiquidationMonitor from "./LiquidationMonitor.vue";
 
 
 export default {
@@ -34,7 +36,8 @@ export default {
   },
   components: {
     GreatestGainers,
-    LargeTrades
+    LargeTrades,
+    LiquidationMonitor
   },
 }
 </script>

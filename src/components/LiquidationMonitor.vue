@@ -2,37 +2,23 @@
 <div class="qs-block">
         <div class="qsb-header">
           <div class="qsb-header-left">
-            <div>Large BTC Trades</div>
+            <div>Liquidation Monitor</div>
           </div>
-            <select @change="e => $emit('input', e.target.tradeFilter)" v-model="tradeFilter" id="field" name="field" data-name="Field" class="select-field">
-              <option :value="0">No Filter</option>
-              <option :value="1000">> 1,000</option>
-              <option :value="5000">> 5,000</option>
-              <option :value="10000">> 10,000</option>
-              <option :value="20000">> 20,000</option>
-              <option :value="30000">> 30,000</option>
-              <option :value="40000">> 40,000</option>
-              <option :value="50000">> 50,000</option>
-              <option :value="100000">> 100,000</option>
-              <option :value="250000">> 250,000</option>
-              <option :value="500000">> 500,000</option>
-              <option :value="1000000">> 1,000,000</option>
-            </select>
         </div>
         <div class="top-gainers">
-          <div v-for="(data) in filteredTrades.slice().reverse()" :key="data.id">
+          <div v-for="data in tradeDataList.slice().reverse()" :key="data">
 
-            <div class="tg-item" :class="tradeDivStyler(data.m)">
+            <div class="tg-item">
               <div id="large-trade-grid" class="w-layout-grid large-trade-grid">
                 <div id="w-node-b736b7d6-0c81-c102-1fde-dd42ddff419b-53bf46aa" class="data-cell">
-                  <div class="text">Bitcoin / TetherUS</div>
-                  <div class="muted-text">Binance.com</div>
+                  <div class="text">{{ data.o.s }}</div>
+                  <div class="muted-text">Binance USD-M Futures</div>
                   <div class="muted-text small">{{ dateTime(data.E) }}</div>
                 </div>
                 <div id="w-node-_2c7ab8d7-3d94-eb89-3828-6f933102b1d1-53bf46aa" class="data-cell-right">
-                  <div class="muted-text">{{ data.t }}</div>
-                  <div class="text-price">${{ Math.floor(data.p * data.q).toLocaleString() }}</div>
-                  <div class="muted-text">{{ data.q }} BTC</div>
+                  <div class="muted-text">{{ data.o.o }} {{ data.o.X }}</div>
+                  <div class="text-price">${{ Math.floor(data.o.p * data.o.q).toLocaleString() }}</div>
+                  <div class="muted-text">{{ data.o.q }} Units</div>
                 </div>
               </div>
             </div>
@@ -74,7 +60,7 @@ export default {
 
         getTradeStream() {
           console.log("Starting connection to WebSocket Server");
-          this.connection = new WebSocket("wss://stream.binance.com:9443/ws/btcusdt@trade");
+          this.connection = new WebSocket("wss://fstream.binance.com/ws/!forceOrder@arr");
 
           this.connection.addEventListener("message", (event) => {
 
@@ -198,6 +184,7 @@ select {
   display: -ms-flexbox;
   display: flex;
   padding: 1rem;
+  background-color: hsla(352, 66%, 56%, 0.1);
   -webkit-box-pack: justify;
   -webkit-justify-content: space-between;
   -ms-flex-pack: justify;

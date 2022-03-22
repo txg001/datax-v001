@@ -1,8 +1,8 @@
 <template>
     <div>
-        <div v-for="data in tradeDataList.reverse()" :key="data.id">
+        <div v-for="data in tradeDataList.reverse()" :key="data">
             <div>
-                {{ data.t }} - {{ data.p }}
+                {{ data.o.s }} - {{ data.o.p }}
             </div>
         </div>
     </div>
@@ -26,7 +26,7 @@ export default {
     getTradeStream() {
 
       console.log("Starting connection to WebSocket Server");
-      this.connection = new WebSocket("wss://stream.binance.com:9443/ws/btcusdt@trade");
+      this.connection = new WebSocket("wss://fstream.binance.com/ws/!forceOrder@arr");
 
       this.connection.addEventListener("message", (event) => {
 
