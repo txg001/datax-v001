@@ -4,11 +4,12 @@
       <select v-model="current" id="field" name="field" data-name="Field" class="select-field">
         <option value="GreatestGainers">Top Movers</option>
         <option value="LargeTrades">Large Trades </option>
-        <option value="LiquidationMonitor">Liquidation Monitor </option>
+        <option value="LiquidationMonitor">Forced Order Monitor </option>
+        <option value="Template">Template </option>
       </select>
       <div class="connection-info">
         <div class="status-circle"></div>
-        <div>Connected</div>
+        <div>{{connectionStatus}}</div>
       </div>
     </div>
     <div class="main-wrap">
@@ -31,18 +32,104 @@ export default {
   data() {
     return {
       current: 'GreatestGainers',
-      isActive: true
+      isActive: true,
+      connectionStatus: '',
+      timer: [],
     };
   },
+
   components: {
     GreatestGainers,
     LargeTrades,
-    LiquidationMonitor
+    LiquidationMonitor,
   },
+
+  created() {
+    this.onlineStatus();
+    this.timer = setInterval(this.onlineStatus, 1000);
+  },
+
+  methods:{
+    onlineStatus() {	
+      if (navigator.onLine) {this.connectionStatus = "Connected";} 
+      else {this.connectionStatus = "Offline";	}
+    },
+
+  }
 }
 </script>
 
 <style scoped>
+.connected {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  padding: 9px 12px;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  border-radius: 4px;
+  background-color: rgba(0, 173, 107, 0.1);
+  color: #00ad6b;
+}
+
+.offline {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  padding: 9px 12px;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  border-radius: 4px;
+  background-color: red;
+  color: #00ad6b;
+}
+
+.connection-info {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  padding: 9px 12px;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  border-radius: 4px;
+  background-color: rgba(0, 173, 107, 0.1);
+  color: #00ad6b;
+}
+
+.status-circle {
+  width: 8px;
+  height: 8px;
+  margin-right: 8px;
+  border-radius: 100%;
+  background-color: #00ad6b;
+  animation: blinker 2s ease-in-out infinite;;
+}
+@keyframes blinker {
+  50% {
+    background-color: rgba(0, 173, 107, 0.25);
+  }
+}
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.1s ease-in;
@@ -155,39 +242,6 @@ select {
 
 .button.middle:focus {
   background: #1b72e3;
-}
-
-.connection-info {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  padding: 9px 12px;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-  -ms-flex-align: center;
-  align-items: center;
-  border-radius: 4px;
-  background-color: rgba(0, 173, 107, 0.1);
-  color: #00ad6b;
-}
-
-.status-circle {
-  width: 8px;
-  height: 8px;
-  margin-right: 8px;
-  border-radius: 100%;
-  background-color: #00ad6b;
-  animation: blinker 2s ease-in-out infinite;;
-}
-@keyframes blinker {
-  50% {
-    background-color: rgba(0, 173, 107, 0.25);
-  }
 }
 
 @media screen and (max-width: 991px) {

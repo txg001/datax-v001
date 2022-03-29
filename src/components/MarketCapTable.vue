@@ -101,6 +101,7 @@
 
 <script>
 import Sparkline from './Sparkline.vue'
+
 import axios from 'axios'
 
 

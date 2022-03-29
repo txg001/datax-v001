@@ -8,6 +8,10 @@
           <router-link :to="{ path: '/' }" class="link">Market Cap Rank</router-link>
         </div>
         <div class="link-block">
+          <div class="sidebar-title">X Studio.</div>
+          <router-link :to="{ path: '/about' }" class="link">Bitcoin</router-link>
+        </div>
+        <div class="link-block">
           <div class="sidebar-title">Misc.</div>
           <router-link :to="{ path: '/about' }" class="link">Sandbox - About</router-link>
         </div>

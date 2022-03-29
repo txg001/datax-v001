@@ -2,13 +2,13 @@
 <div class="qs-block">
         <div class="qsb-header">
           <div class="qsb-header-left">
-            <div>Liquidation Monitor</div>
+            <div>Forced Order Monitor</div>
           </div>
         </div>
         <div class="top-gainers">
           <div v-for="data in tradeDataList.slice().reverse()" :key="data">
 
-            <div class="tg-item">
+            <div class="tg-item" :class="tradeDivStyler(data.o.S)">
               <div id="large-trade-grid" class="w-layout-grid large-trade-grid">
                 <div id="w-node-b736b7d6-0c81-c102-1fde-dd42ddff419b-53bf46aa" class="data-cell">
                   <div class="text">{{ data.o.s }}</div>
@@ -16,9 +16,9 @@
                   <div class="muted-text small">{{ dateTime(data.E) }}</div>
                 </div>
                 <div id="w-node-_2c7ab8d7-3d94-eb89-3828-6f933102b1d1-53bf46aa" class="data-cell-right">
-                  <div class="muted-text">{{ data.o.o }} {{ data.o.X }}</div>
+                  <div class="muted-text">{{ data.o.o }} {{ data.o.S }}</div>
                   <div class="text-price">${{ Math.floor(data.o.p * data.o.q).toLocaleString() }}</div>
-                  <div class="muted-text">{{ data.o.q }} Units</div>
+                  <div class="muted-text">{{ data.o.q }} Coins</div>
                 </div>
               </div>
             </div>
@@ -44,7 +44,7 @@ export default {
 
     data: () => ({
         errors: [],
-        isMarketMaker: true,
+        isMarketMaker: '',
         tradeFilter: 0,
         connection: null,
         tradeDataList: [],
@@ -66,6 +66,8 @@ export default {
 
             let tradeDataString = event.data;
 
+            console.log(tradeDataString)
+
             let parsedData = JSON.parse(tradeDataString);
             
             // push new item to array
@@ -83,8 +85,8 @@ export default {
 
         tradeDivStyler(value) { 
             return {
-            'market-maker': value === true,
-            'market-taker': value === false
+            'market-maker': value === 'BUY',
+            'market-taker': value === 'SELL'
           };
         },
 
@@ -184,7 +186,6 @@ select {
   display: -ms-flexbox;
   display: flex;
   padding: 1rem;
-  background-color: hsla(352, 66%, 56%, 0.1);
   -webkit-box-pack: justify;
   -webkit-justify-content: space-between;
   -ms-flex-pack: justify;

@@ -2,37 +2,23 @@
 <div class="qs-block">
         <div class="qsb-header">
           <div class="qsb-header-left">
-            <div>Large BTC Trades</div>
+            <div>Template</div>
           </div>
-            <select @change="e => $emit('input', e.target.tradeFilter)" v-model="tradeFilter" id="field" name="field" data-name="Field" class="select-field">
-              <option :value="0">No Filter</option>
-              <option :value="1000">> 1,000</option>
-              <option :value="5000">> 5,000</option>
-              <option :value="10000">> 10,000</option>
-              <option :value="20000">> 20,000</option>
-              <option :value="30000">> 30,000</option>
-              <option :value="40000">> 40,000</option>
-              <option :value="50000">> 50,000</option>
-              <option :value="100000">> 100,000</option>
-              <option :value="250000">> 250,000</option>
-              <option :value="500000">> 500,000</option>
-              <option :value="1000000">> 1,000,000</option>
-            </select>
         </div>
         <div class="top-gainers">
-          <div v-for="(data) in filteredTrades.slice().reverse()" :key="data.id">
+          <div v-for="data in rapidMovement" :key="data">
 
-            <div class="tg-item" :class="tradeDivStyler(data.m)">
+            <div class="tg-item">
               <div id="large-trade-grid" class="w-layout-grid large-trade-grid">
                 <div id="w-node-b736b7d6-0c81-c102-1fde-dd42ddff419b-53bf46aa" class="data-cell">
-                  <div class="text">Bitcoin / TetherUS</div>
-                  <div class="muted-text">Binance Spot / Margin</div>
-                  <div class="muted-text small">{{ dateTime(data.E) }}</div>
+                  <div class="text">{{  }}</div>
+                  <div class="muted-text">Binance USD-M Futures</div>
+                  <div class="muted-text small">{{  }}</div>
                 </div>
                 <div id="w-node-_2c7ab8d7-3d94-eb89-3828-6f933102b1d1-53bf46aa" class="data-cell-right">
-                  <div class="muted-text">{{ data.t }}</div>
-                  <div class="text-price">${{ Math.floor(data.p * data.q).toLocaleString() }}</div>
-                  <div class="muted-text">{{ data.q }} BTC</div>
+                  <div class="muted-text"> </div>
+                  <div class="text-price"> </div>
+                  <div class="muted-text">Coins</div>
                 </div>
               </div>
             </div>
@@ -45,6 +31,7 @@
 
 <script>
 import moment from 'moment'
+import axios from 'axios'
 
 export default {
 
@@ -52,69 +39,27 @@ export default {
     },
 
     created() {
-        this.getTradeStream();
+        this.getRapidMovements();
         this.moment = moment;
+        this.timer = setInterval(this.getPrice, 15000);
     },
 
     data: () => ({
         errors: [],
-        isMarketMaker: true,
-        tradeFilter: 0,
-        connection: null,
-        tradeDataList: [],
+        timer: [],
+        rapidMovement: [],
     }),
-
-    computed: {
-      filteredTrades() {
-              return this.tradeDataList.filter(data => Math.floor(data.p * data.q) > this.tradeFilter);
-      }
-    },
 
     methods: {
 
-        getTradeStream() {
-          console.log("Starting connection to WebSocket Server");
-          this.connection = new WebSocket("wss://stream.binance.com:9443/ws/btcusdt@trade");
-
-          this.connection.addEventListener("message", (event) => {
-
-            let tradeDataString = event.data;
-
-            let parsedData = JSON.parse(tradeDataString);
-            
-            // push new item to array
-            this.tradeDataList.push(parsedData);
-            
-            // keep only last 10
-            this.tradeDataList = this.tradeDataList.slice(Math.max(this.tradeDataList.length - 250, 0))
-          });
-
-          this.connection.onopen = function(event) {
-            console.log(event);
-            console.log("Successfully connected to the echo websocket server...");
-          };
-        },
-
-        tradeDivStyler(value) { 
-            return {
-            'market-maker': value === true,
-            'market-taker': value === false
-          };
-        },
-
-        largeTradeFilter(value) { 
-            return {
-            't10000': value > 10000,
-            'market-taker': value === false
-          };
-        },
-
-        currency(value) {
-            return new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 4 }).format(value);
-        },
-
-        dateTime(value) {
-          return moment(value).format('MMMM Do YYYY, h:mm:ss a');
+        async getRapidMovements() {
+            axios
+            .get('https://api.cryptometer.io/current-day-long-short-v2/?e=api_key=614Q10owvKgZY0rg3FoqG7g5gJ7bFo405L2i6Rvg')
+            .then(response => { 
+              this.rapidMovement = response.data;
+              console.log(response.data)
+            })
+            .catch(e => { this.errors.push(e)})
         },
 
     },
